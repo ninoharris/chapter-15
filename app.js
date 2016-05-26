@@ -91,14 +91,62 @@ something.click(function() {
 
  	}
 
-
-
-
-
-
-
-
-
-
  	console.log(headings);
  });
+ 
+(function() { // create a closure to prevent dirtying up the global namespace
+	// return nothing if the function outerHTML() exists
+
+	// Return the outer HTML of the element to the speicified value
+	function outerHTMLGetter() {
+		var container = document.createElement("div");
+		container.appendChild(this.cloneNode(true));
+		return container.innerHTML;
+	}
+	// Set the outer HTML of the this element to the specified value
+	function outerHTMLSetter(value) {
+		// We can only action on the parent node, so let's refer to that
+		var parent = this.parentNode;
+		// Create a container to hold all our parsed HTML
+		var container = document.createElement("div");
+		container.innerHTML = value;
+		// Add each child node to the parent element
+		while(container.firstChild)
+			parent.insertBefore(container.firstChild, this);
+		// Delete the previous child nodes
+		parent.removeChild(this);
+	}
+
+	// Use these two functions are getters and setters for the outerHTML property
+	// Use ES5 Object.defineProperty if it exists, otherwise fall ball on
+	// __defineGetter__ and __defineSetter__.
+	if (Object.defineProperty) {
+		Object.defineProperty(Element.prototype, "outeyHTML", 
+		{
+			get: outerHTMLGetter,
+			set: outerHTMLSetter,
+			enumerable: false,
+			configurable: true
+		});
+
+	} else {
+		Element.prototype.__defineGetter__("outeyHTML", outerHTMLGetter);
+		Element.prototype.__defineSetter__("outeyHTML", outerHTMLSetter);
+	}
+}());
+
+var replaceHTMLdiv = document.querySelector(".replace-me");
+// console.log(replaceHTMLdiv);
+replaceHTMLdiv.outeyHTML = "<div class='it works'>This is the replacement (aka it works)</div>"
+
+// Reverse the order of the children of Node n
+function reverse(n) {
+	var f = document.createElement("div");
+	while(n.lastChild) {
+		f.appendChild(n.lastChild);
+		console.log(f);
+	}
+	n.appendChild(f);
+}
+
+reverse(document.querySelector(".reverse-me"))
