@@ -93,7 +93,7 @@ something.click(function() {
 
  	console.log(headings);
  });
- 
+
 (function() { // create a closure to prevent dirtying up the global namespace
 	// return nothing if the function outerHTML() exists
 
@@ -149,4 +149,146 @@ function reverse(n) {
 	n.appendChild(f);
 }
 
-reverse(document.querySelector(".reverse-me"))
+reverse(document.querySelector(".reverse-me"));
+
+// Return the current scrollbar offsets as the x and y properties of an object
+function getScrollOffsets(w) {
+	// Use the specified window or the current window if no argument
+	w = w || window;
+
+	// Default behaviour
+	if (w.pageXOffset) return {x: w.pageXOffset, y: w.pageYOffset};
+
+	// For IE (or any other browser) in Standards mode
+	var d = w.document;
+	if (document.compatMode == "CSS1Compat")
+		return { x:d.documentElement.scrollLeft, y:d.document.scrollTop };
+
+	// For browsers in Quirks mode
+	return { x: d.body.scrollLeft, y: d.body.scrollTop }
+
+}
+
+
+// Return the viewport size as w and h properties of an object
+function getViewportSize(w) {
+	// Use the specified window or the current window if no argument
+	w = w || window;
+
+	if (w.innerWidth != null) return {w: w.innerWidth, h: w.innerHeight};
+
+	// For other in standards mode
+	var d = w.document;
+	if (document.compatMode == "CSS1Compat")
+		return { w: d.documentElement.clientWidth, h: d.documentElement.clientHeight};
+
+	// For browsers in Quirks mode
+	return { w: d.body.clientWidth, h: d.body.clientHeight};
+
+}
+
+function getElementSize(el) {
+	var box = el.getBoundingClientRect();
+	return { 
+		w: (box.width || (box.right - box.left)),
+		h: (box.height || (box.right - box.left))
+	};
+}
+
+// Scroll to the bottom
+function scrollToBottom() {
+	var posX = window.pageXOffset;
+	var pageHeight = document.body.getBoundingClientRect().width;
+	var targetHeight =  pageHeight - window.innerHeight;
+	if (targetHeight > 0)
+		window.scrollTo(posX, targetHeight);
+}
+
+function getElementPosition(el) {
+	var x = 0, y = 0;
+	while(el != null) {
+		x += el.offsetLeft;
+		y += el.offsetTop;
+		el = el.offsetParent;
+	}
+	return { x: x, y: y };
+}
+
+function getElementPosition2(e) {
+	// what you want to do here is add up all the total top and left positions and MINUS all the scrolls. easy to do huh?
+	var x = 0;
+	var y = 0;
+
+
+
+	return { x:x, y:y };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
