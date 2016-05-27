@@ -239,12 +239,38 @@ function getElementPosition2(e) {
 	return { x:x, y:y };
 }
 
+var shipping = document.forms.shipping;
+shipping.onreset = return confirm('Are you sure you want to do this? It means restarting');
+shipping.onsubmit = return confirm('Do you wish to submit all your personal information? We WILL use it against you');
 
 
+if (document.referrer.indexOf("http://www.google.com/") == 0) {
+	var args = document.referrer.substring(document.referrer.indexOf("?")+1).split("&");
+	for ( var i = 0; i < args.length; i++ ) {
+		if ( args[i].substring(0,2) == "q=") {
+			document.write("<p>Welcome Google user.");
+			document.write("You searched for " + 
+				unescape(args[i].substring(2)).replace('+', " "));
+				break;
+		}
+	}
+};
 
-
-
-
+function ElementStream(elt) {
+	if ( typeof elt == "string" ) elt = document.getElementById(elt);
+	this.elt = elt;
+	this.buffer = "";
+}
+ElementStream.prototype.write = function(/* input of strings */) {
+	this.buffer += Array.prototype.join.call(arguments, "");
+}
+ElementStream.prototype.writeln = function(/* a list of strings */) {
+	this.buffer += Array.prototype.join.call(arguments, "") + "\n";
+}
+ElementStream.prototype.close = function() {
+	this.elt.innerHTML = this.buffer;
+	this.buffer = "";
+}
 
 
 
