@@ -215,18 +215,29 @@ function getElementPosition(el) {
 }
 
 function getElementPosition2(e) {
-	// what you want to do here is add up all the total top and left positions and MINUS all the scrolls. easy to do huh?
+	// what you want to do here is add up all the total top and left positions and MINUS all the scrolls.
+	// easy to do huh?
 	var x = 0;
 	var y = 0;
 
+	for ( var elt = e; elt != null; elt = elt.offsetParent ) {
+		x += elt.offsetLeft;
+		y += elt.offsetTop;
+	}
 
+	// Loop again, through all ancestor elements to subtract scroll offsets
+	// 
+	// This subtracts the main scrollbars, too, *and coverts to ****  viewport coords  ****.
+	// 
+	// We start with elt = e.offsetParent because we don't want to include the element's inner scroll distances
+	for ( var elt = e.offsetParent, i = 0; elt != null && elt.nodeType == 1; elt = elt.offsetParent ) {
+		x -= elt.scrollLeft;
+		y -= elt.scrollTop;
+		console.log("Level: " + i + " of element " + elt + " minuses a vertical of " + elt.scrollTop);
+	}
 
 	return { x:x, y:y };
 }
-
-
-
-
 
 
 
