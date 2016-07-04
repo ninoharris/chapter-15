@@ -240,8 +240,9 @@ function getElementPosition2(e) {
 }
 
 var shipping = document.forms.shipping;
-shipping.onreset = return confirm('Are you sure you want to do this? It means restarting');
-shipping.onsubmit = return confirm('Do you wish to submit all your personal information? We WILL use it against you');
+// Jibberish vvv
+//shipping.onreset = return confirm('Are you sure you want to do this? It means restarting');
+//shipping.onsubmit = return confirm('Do you wish to submit all your personal information? We WILL use it against you');
 
 
 if (document.referrer.indexOf("http://www.google.com/") == 0) {
@@ -273,11 +274,28 @@ ElementStream.prototype.close = function() {
 }
 
 
+// Useful for bookmarklets
+function getSelectedText() {
+	if (window.getSelection) // for HTML5 standard API
+		return window.getSelection().toString();
+	else if (document.selection) // This is a IE specific implementation
+		return document.selection.createRange().text;
+}
 
 
 
 
-
+/* Event handling */
+function addEvent(target, type, handler) {
+    if (target.addEventListener)
+        target.addEventListener(type, handler, false);
+    else
+        target.attachEvent  ("on" + type,
+                            function(event) {
+                                // Invoke the handler as a method of target
+                                return handler.call(target,event);
+                            });
+}
 
 
 
